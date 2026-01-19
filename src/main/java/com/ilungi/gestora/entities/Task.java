@@ -49,7 +49,23 @@ public class Task implements Serializable{
 		this.createAt = createAt;
 		this.endDate = endDate;
 		this.responsible = responsible;
-		this.status = TaskStatus.PEDDING;
+		this.status = TaskStatus.PEDING;
+	}
+
+	
+	
+	
+
+	public Task(Long id, String title, String description, Date createAt, Date endDate, TaskStatus status,
+			User responsible) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.createAt = createAt;
+		this.endDate = endDate;
+		this.status = status;
+		this.responsible = responsible;
 	}
 
 
