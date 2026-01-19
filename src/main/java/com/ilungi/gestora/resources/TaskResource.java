@@ -4,11 +4,15 @@ package com.ilungi.gestora.resources;
 import com.ilungi.gestora.entities.Role;
 import com.ilungi.gestora.entities.Task;
 import com.ilungi.gestora.entities.User;
+import com.ilungi.gestora.servicies.TaskService;
 
 import java.util.Date;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,12 +20,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/tasks")
 public class TaskResource {
+	@Autowired
+	private TaskService service;
+	
 	@GetMapping
-	public ResponseEntity<Task> findAll(){
-		//public Task(Long id, String title, String description, Date createAt, Date endDate, User responsible)
-		User l = new User(1L, "la@gmail.com", "99999","Luciano", "123", Role.USER);
-		Task t =  new Task(1L, "Beber cafe", "Ir a copa beber cafe", new Date(2026, 1, 20), new Date(2026, 2, 20), l);
-		return ResponseEntity.ok().body(t);
+	public ResponseEntity<List<Task>> findAll(){
+		List<Task> list = service.findAll();
+		return ResponseEntity.ok().body(list);
+	}
+	
+	@GetMapping(value = "/{id")
+	public ResponseEntity<Task> findById(@PathVariable Long id){
+		Task obj = service.findById(id);
+		
+		return ResponseEntity.ok().body(obj);
 	}
 	
 	
