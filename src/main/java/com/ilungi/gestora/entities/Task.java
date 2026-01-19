@@ -25,7 +25,9 @@ public class Task implements Serializable{
 	private String description;
 	private Date createAt;
 	private Date endDate;
+	private TaskStatus status;
 	private User responsible ;
+	
 	
 	
 	public Task() {}
@@ -40,6 +42,17 @@ public class Task implements Serializable{
 		this.createAt = createAt;
 		this.endDate = endDate;
 		this.responsible = responsible;
+		this.status = TaskStatus.ToDo;
+	}
+
+
+	public TaskStatus getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(TaskStatus status) {
+		this.status = status;
 	}
 
 
