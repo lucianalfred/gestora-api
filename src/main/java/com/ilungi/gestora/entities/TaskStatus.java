@@ -1,8 +1,9 @@
 package com.ilungi.gestora.entities;
 
 public enum TaskStatus {
-	ToDo,
-	Hold,
-	Doing,
-	Done
+	PEDDING,
+	TODO,
+	HOLD,
+	DOING,
+	DONE
 }

@@ -29,7 +29,7 @@ public class TaskResource {
 		return ResponseEntity.ok().body(list);
 	}
 	
-	@GetMapping(value = "/{id")
+	@GetMapping(value = "/{id}")
 	public ResponseEntity<Task> findById(@PathVariable Long id){
 		Task obj = service.findById(id);
 		

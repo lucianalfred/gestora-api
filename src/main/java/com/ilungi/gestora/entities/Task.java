@@ -4,10 +4,14 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,6 +30,9 @@ public class Task implements Serializable{
 	private Date createAt;
 	private Date endDate;
 	private TaskStatus status;
+	
+	@ManyToOne
+	@JoinColumn(name = "responsible_id")
 	private User responsible ;
 	
 	
@@ -42,7 +49,7 @@ public class Task implements Serializable{
 		this.createAt = createAt;
 		this.endDate = endDate;
 		this.responsible = responsible;
-		this.status = TaskStatus.ToDo;
+		this.status = TaskStatus.PEDDING;
 	}
 
 
@@ -105,7 +112,7 @@ public class Task implements Serializable{
 		this.endDate = endDate;
 	}
 
-
+	@JsonIgnore
 	public User getResponsible() {
 		return responsible;
 	}
