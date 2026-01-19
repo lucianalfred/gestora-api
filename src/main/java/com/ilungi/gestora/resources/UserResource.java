@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.ilungi.gestora.entities.Role;
 import com.ilungi.gestora.entities.User;
 
 @RestController
@@ -12,7 +13,8 @@ import com.ilungi.gestora.entities.User;
 public class UserResource {
 	@GetMapping
 	public ResponseEntity<User> finaAll(){
-		User l = new User(1L, "Luciano", "la@gmail.com", "99999", "12345");
+		//public User(Long id, String email, String phone, String name, String password, Role role) 
+		User l = new User(1L, "la@gmail.com", "99999","Luciano", "123", Role.USER);
 		return ResponseEntity.ok().body(l);
 	}
 

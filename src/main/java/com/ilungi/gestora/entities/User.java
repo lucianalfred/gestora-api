@@ -6,6 +6,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,6 +21,7 @@ public class User  implements Serializable{
 	/**
 	 * 
 	 */
+
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -27,53 +30,28 @@ public class User  implements Serializable{
 	private String email;
 	private String phone;
 	private String name;
+	private String password;
+	
+	@Enumerated(EnumType.STRING)
+	private Role role;
 	
 	public User() {}
 	
-	public User(Long id, String name, String email, String phone, String password){
-		
+	
+	
+	
+	public User(Long id, String email, String phone, String name, String password, Role role) {
 		super();
 		this.id = id;
-		this.name = name;
-		this.email =  email;
-		this.phone = phone;
-		
-	}
-
-	@JsonProperty
-	private Long getId() {
-		return id;
-	}
-	
-	@JsonProperty
-	private void setId(Long id) {
-		this.id = id;
-	}
-
-	@JsonProperty
-	private String getEmail() {
-		return email;
-	}
-	@JsonProperty
-	private void setEmail(String email) {
 		this.email = email;
-	}
-	@JsonProperty
-	private String getPhone() {
-		return phone;
-	}
-	@JsonProperty
-	private void setPhone(String phone) {
 		this.phone = phone;
-	}
-	@JsonProperty
-	private String getName() {
-		return name;
-	}
-	@JsonProperty
-	private void setName(String name) {
 		this.name = name;
+		this.password = password;
+		this.role = role;
 	}
+
+
+
 
 	@Override
 	public int hashCode() {
@@ -96,6 +74,46 @@ public class User  implements Serializable{
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", phone=" + phone + ", name=" + name + "]";
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 	
 	
