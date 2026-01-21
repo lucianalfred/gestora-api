@@ -101,7 +101,7 @@ public class TaskService {
             try {
                 task.setStatus(TaskStatus.valueOf(statusStr));
             } catch (Exception e) {
-                // Ignora status inválido
+                
             }
         }
         
@@ -111,7 +111,7 @@ public class TaskService {
                 Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
                 task.setEndDate(date);
             } catch (Exception e) {
-                // Ignora erro de data
+                
             }
         }
         
