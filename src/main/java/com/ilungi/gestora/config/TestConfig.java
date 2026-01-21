@@ -35,6 +35,7 @@ public class TestConfig implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // Criando 10 usuários
+    	//User(Long id, String name, String email, String phone, String password, Role role)
         User u1 = new User(null, "Antonio Silva", "antonio@gmail.com", "199999001", "123456", Role.ADMIN); 
         User u2 = new User(null, "Leonor Flora", "leonorflora@gmail.com", "199999002", "123456", Role.USER); 
         User u3 = new User(null, "Maria Santos", "maria.santos@gmail.com", "199999003", "123456", Role.USER);

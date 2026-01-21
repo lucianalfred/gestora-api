@@ -49,5 +49,17 @@ public class TaskService {
 				return repository.save(task);
 				
 	}
+	
+	
+	public Task createTask(Task task) {
+	 
+	    if (task.getResponsible() != null && task.getResponsible().getId() != null) {
+	        User responsible = userRepository.findById(task.getResponsible().getId())
+	            .orElseThrow(() -> new RuntimeException("User not found with id: " + task.getResponsible().getId()));
+	        task.setResponsible(responsible);
+	    }
+	    
+	    return repository.save(task);
+	}
 
 }

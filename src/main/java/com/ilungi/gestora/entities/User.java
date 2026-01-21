@@ -1,9 +1,12 @@
 package com.ilungi.gestora.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -32,15 +36,23 @@ public class User  implements Serializable{
 	private String name;
 	private String password;
 	
+	
+	
 	@Enumerated(EnumType.STRING)
 	private Role role;
+	
+	
+	@OneToMany(mappedBy = "responsible")
+	@JsonIgnore
+	private List<Task> tasks = new ArrayList<>();
+	
 	
 	public User() {}
 	
 	
 	
 	
-	public User(Long id, String email, String phone, String name, String password, Role role) {
+	public User(Long id, String name, String email, String phone, String password, Role role) {
 		super();
 		this.id = id;
 		this.email = email;

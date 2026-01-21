@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,6 +35,7 @@ public class Task implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "responsible_id")
+	@JsonIgnoreProperties({"tasks", "password"})
 	private User responsible ;
 	
 	
@@ -128,7 +131,18 @@ public class Task implements Serializable{
 		this.endDate = endDate;
 	}
 
-	@JsonIgnore
+
+	@JsonProperty("responsibleId")
+	public Long getResponsibleId() {
+	    return responsible != null ? responsible.getId() : null;
+	}
+	
+	@JsonProperty("reponsibleName")
+	public String getResponsibleName() {
+		return responsible != null ? responsible.getName() : null;
+	}
+	
+	
 	public User getResponsible() {
 		return responsible;
 	}
@@ -138,6 +152,7 @@ public class Task implements Serializable{
 		this.responsible = responsible;
 	}
 
+	
 
 	@Override
 	public int hashCode() {
