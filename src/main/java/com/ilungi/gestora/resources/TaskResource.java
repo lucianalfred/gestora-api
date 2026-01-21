@@ -164,16 +164,13 @@ public class TaskResource {
 	
    //atualizar tarefa
    
- 
-   
-  
    @PatchMapping("/{id}/status")
    public ResponseEntity<?> updateStatus(
            @PathVariable Long id,
            @RequestBody Map<String, String> json) {
        
        try {
-           // Verifica se o campo "status" existe
+   
            if (!json.containsKey("status")) {
                Map<String, String> error = new HashMap<>();
                error.put("error", "Campo 'status' é obrigatório");
@@ -182,7 +179,7 @@ public class TaskResource {
            
            String statusStr = json.get("status").trim().toUpperCase();
            
-           // Valida se é um status válido
+   
            try {
                TaskStatus status = TaskStatus.valueOf(statusStr);
                
