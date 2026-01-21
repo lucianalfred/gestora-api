@@ -136,16 +136,25 @@ public class TaskResource {
 	  
 	}
 
+	//apaga a tarefa
    @DeleteMapping("/{id}")
 	public ResponseEntity<Map<String, String>> deleteTask(@PathVariable Long id){
+	
+	   try {
+		   service.deleteTask(id);
 				
-	   service.deleteTask(id);
-				
-	   Map<String, String> response = new HashMap<>();		
-	   response.put("message", "Tarefa apagada com sucesso!");
-	   response.put("deleteId", id.toString());
-				
-	  return ResponseEntity.ok(response);
+		   Map<String, String> response = new HashMap<>();
+		   
+		   response.put("message", "Tarefa apagada com sucesso!");
+		   response.put("id", id.toString());
+		   return ResponseEntity.ok(response);
+	   }
+	   catch (Exception e) {
+		   Map<String, String> errorResponse = new HashMap<>();
+		   errorResponse.put("error", "Tarefa não encontrada!");
+	       errorResponse.put("id", id.toString());
+		   return ResponseEntity.status(404).body(errorResponse);
+	   }
 	}
 	
 }
