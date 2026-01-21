@@ -11,11 +11,13 @@ import com.ilungi.gestora.servicies.TaskService;
 import java.net.URI;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -130,8 +132,20 @@ public class TaskResource {
 	    } catch (Exception e) {
 	        throw new RuntimeException("Erro ao criar task: " + e.getMessage());
 	    }
+	
+	  
 	}
-	
-	
+
+   @DeleteMapping("/{id}")
+	public ResponseEntity<Map<String, String>> deleteTask(@PathVariable Long id){
+				
+	   service.deleteTask(id);
+				
+	   Map<String, String> response = new HashMap<>();		
+	   response.put("message", "Tarefa apagada com sucesso!");
+	   response.put("deleteId", id.toString());
+				
+	  return ResponseEntity.ok(response);
+	}
 	
 }

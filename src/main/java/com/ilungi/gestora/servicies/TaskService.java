@@ -61,5 +61,19 @@ public class TaskService {
 	    
 	    return repository.save(task);
 	}
+	
+	public void deleteTask(Long id) {
+		
+		if (!repository.existsById(id)) {
+			throw new RuntimeException("Task not found with id" + id);
+		}
+		repository.deleteById(id);
+	}
+	
+	public Task deleteAndReturn(Long id) {
+		Task task = findById(id);
+		repository.delete(task);
+		return task;
+	}
 
 }
