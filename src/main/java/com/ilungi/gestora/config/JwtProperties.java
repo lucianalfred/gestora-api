@@ -7,18 +7,18 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperties {
 	private String secret = "ilungi-key-private-gestora2026110211";
-	private Long experation = 8640000L;
+	private Long expiration = 8640000L;
 	public String getSecret() {
 		return secret;
 	}
 	public void setSecret(String secret) {
 		this.secret = secret;
 	}
-	public Long getExperation() {
-		return experation;
+	public Long getExpiration() {
+		return expiration;
 	}
-	public void setExperation(Long experation) {
-		this.experation = experation;
+	public void setExpiration(Long experation) {
+		this.expiration = experation;
 	}
 	
 	
