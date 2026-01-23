@@ -31,6 +31,7 @@ public class Task implements Serializable{
 	private String description;
 	private Date createAt;
 	private Date endDate;
+	private Integer daysToFinish;
 	private TaskStatus status;
 	
 	@ManyToOne
@@ -58,6 +59,16 @@ public class Task implements Serializable{
 	
 	
 	
+
+	public Integer getDaysToFinish() {
+		return daysToFinish;
+	}
+
+
+	public void setDaysToFinish(Integer daysToFinish) {
+		this.daysToFinish = daysToFinish;
+	}
+
 
 	public Task(Long id, String title, String description, Date createAt, Date endDate, TaskStatus status,
 			User responsible) {
