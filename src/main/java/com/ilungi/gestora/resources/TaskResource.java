@@ -9,6 +9,8 @@ import com.ilungi.gestora.entities.User;
 import com.ilungi.gestora.servicies.TaskService;
 import com.ilungi.gestora.servicies.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,6 +39,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/tasks")
+@Tag(name = "Tasks", description = "Operações relacionadas a tarefas")
 public class TaskResource {
     
     @Autowired

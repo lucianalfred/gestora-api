@@ -58,7 +58,12 @@ public class SecurityConfig {
                 // Rotas que precisam de autenticação
                 .requestMatchers("/tasks/**").authenticated()
                 .requestMatchers("/users/**").authenticated()
-                
+                .requestMatchers(
+                	    "/swagger-ui.html",
+                	    "/swagger-ui/**",
+                	    "/v3/api-docs/**",
+                	    "/api-docs/**"
+                	).permitAll()
                 // Qualquer outra rota
                 .anyRequest().authenticated()
             )

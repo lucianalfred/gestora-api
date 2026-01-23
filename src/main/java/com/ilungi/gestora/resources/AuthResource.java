@@ -3,6 +3,9 @@ package com.ilungi.gestora.resources;
 import com.ilungi.gestora.config.JwtTokenProvider;
 import com.ilungi.gestora.entities.User;
 import com.ilungi.gestora.repositories.UserRepository;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Autenticação", description = "Operações de login e registro")
 public class AuthResource {
     
     @Autowired
