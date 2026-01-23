@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 @Component
@@ -27,32 +29,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                   HttpServletResponse response, 
                                   FilterChain filterChain) throws ServletException, IOException {
         
-        System.out.println("Filtro JWT executando para: " + request.getRequestURI());
-        
         String token = extractToken(request);
-        System.out.println("Token extraído: " + (token != null ? "SIM" : "NÃO"));
         
-        if (token != null) {
-            System.out.println("Token válido? " + jwtTokenProvider.validateToken(token));
+        if (token != null && jwtTokenProvider.validateToken(token)) {
+            String email = jwtTokenProvider.getEmailFromToken(token);
+            String role = jwtTokenProvider.getRoleFromToken(token);
             
-            if (jwtTokenProvider.validateToken(token)) {
-                String email = jwtTokenProvider.getEmailFromToken(token);
-                String role = jwtTokenProvider.getRoleFromToken(token);
-                
-                System.out.println("Email do token: " + email);
-                System.out.println("Role do token: " + role);
-                
-                // Cria autenticação
-                UsernamePasswordAuthenticationToken authentication = 
-                    new UsernamePasswordAuthenticationToken(
-                        email, 
-                        null, 
-                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
-                    );
-                
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                System.out.println("🔓 Autenticação configurada no SecurityContext");
-            }
+            // Cria authorities (roles) - Spring espera "ROLE_" prefix
+            Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+            
+            UsernamePasswordAuthenticationToken authentication = 
+                new UsernamePasswordAuthenticationToken(email, null, authorities);
+            
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         
         filterChain.doFilter(request, response);

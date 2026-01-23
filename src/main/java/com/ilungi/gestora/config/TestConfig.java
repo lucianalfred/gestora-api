@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.ilungi.gestora.GestoraApplication;
 import com.ilungi.gestora.entities.Role;
@@ -28,6 +29,9 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private TaskRepository taskRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
     TestConfig(GestoraApplication gestoraApplication) {
         this.gestoraApplication = gestoraApplication;
     }
@@ -73,5 +77,36 @@ public class TestConfig implements CommandLineRunner {
         System.out.println("Dados de teste carregados com sucesso!");
         System.out.println("Usuários criados: " + userRepository.count());
         System.out.println("Tasks criadas: " + taskRepository.count());
+        
+        
+        
+        
+        
+            // Criar usuário ADMIN
+        User admin = new User();
+        admin.setName("Administrador");
+        admin.setEmail("admin@system.com");
+        admin.setPassword(passwordEncoder.encode("admin123"));
+        admin.setPhone("000000000");
+        admin.setRole(com.ilungi.gestora.entities.Role.ADMIN);
+            
+        if (userRepository.findByEmail(admin.getEmail()).isEmpty()) {
+              userRepository.save(admin);
+             System.out.println("Usuário ADMIN criado: admin@system.com / admin123");
+        }
+            
+       // Criar usuário comum
+       User user = new User();
+       user.setName("Usuário Comum");
+       user.setEmail("user@test.com");
+       user.setPassword(passwordEncoder.encode("123456"));
+       user.setPhone("999999999");
+       user.setRole(com.ilungi.gestora.entities.Role.USER);
+            
+       if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
+          userRepository.save(user);
+          System.out.println("✅ Usuário USER criado: user@test.com / 123456");
+       }
+        
     }
 }

@@ -53,7 +53,7 @@ public class Task implements Serializable{
 		this.createAt = createAt;
 		this.endDate = endDate;
 		this.responsible = responsible;
-		this.status = TaskStatus.PEDING;
+		this.status = TaskStatus.PENDING;
 	}
 
 	

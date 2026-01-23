@@ -10,12 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -33,7 +28,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
-                // PERMITE TODOS OS RECURSOS DO H2-CONSOLE
+                // ✅ PERMITE TODOS OS RECURSOS DO H2-CONSOLE
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/h2-console/*").permitAll()
                 .requestMatchers("/h2-console").permitAll()
@@ -53,6 +48,13 @@ public class SecurityConfig {
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/favicon.ico").permitAll()
                 
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/tasks/admin/**").hasRole("ADMIN")
+                .requestMatchers("/users/admin/**").hasRole("ADMIN")
+
+                // Rotas que precisam de autenticação
+                .requestMatchers("/tasks/**").authenticated()
+                .requestMatchers("/users/**").authenticated()
                 // Rotas que precisam de autenticação
                 .requestMatchers("/tasks/**").authenticated()
                 .requestMatchers("/users/**").authenticated()
@@ -60,7 +62,6 @@ public class SecurityConfig {
                 // Qualquer outra rota
                 .anyRequest().authenticated()
             )
-            // NECESSÁRIO para H2 Console funcionar
             .headers(headers -> headers
                 .frameOptions(frame -> frame.sameOrigin()) // Permite iframes do mesmo origin
                 .contentTypeOptions(HeadersConfigurer.ContentTypeOptionsConfig::disable)
@@ -75,3 +76,10 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
+
+
+/**
+*
+*   
+
+.anyRequest().authenticated()*/
