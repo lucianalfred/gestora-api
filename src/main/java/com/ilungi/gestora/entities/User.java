@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -34,7 +35,10 @@ public class User  implements Serializable{
 	private String email;
 	private String phone;
 	private String name;
-	private String password;
+	
+	
+	@Column(nullable = false)
+    private String password;
 	
 	
 	@Enumerated(EnumType.STRING)
@@ -60,6 +64,13 @@ public class User  implements Serializable{
 		this.password = password;
 		this.role = role;
 	}
+
+
+
+
+	
+
+
 
 
 
@@ -127,7 +138,24 @@ public class User  implements Serializable{
 		this.role = role;
 	}
 	
-	
+	public String getPassword() {
+		return password;
+	}
+
+
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
+
+
+	public List<Task> getTasks() {
+		return tasks;
+	}
+
 	
 	
 	

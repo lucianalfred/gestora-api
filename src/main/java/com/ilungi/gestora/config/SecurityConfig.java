@@ -2,10 +2,9 @@ package com.ilungi.gestora.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,53 +30,48 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
-                // Rotas públicas (não precisam de autenticação)
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/users/register").permitAll()
+                // PERMITE TODOS OS RECURSOS DO H2-CONSOLE
                 .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/h2-console/*").permitAll()
+                .requestMatchers("/h2-console").permitAll()
+                
+                // Permite recursos estáticos do H2
+                .requestMatchers("/*.css").permitAll()
+                .requestMatchers("/*.js").permitAll()
+                .requestMatchers("/*.gif").permitAll()
+                .requestMatchers("/*.jpg").permitAll()
+                .requestMatchers("/*.png").permitAll()
+                .requestMatchers("/*.ico").permitAll()
+                .requestMatchers("/*.jsp").permitAll()
+                .requestMatchers("/*.do").permitAll()
+                
+                // Rotas públicas da sua API
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/error").permitAll()
+                .requestMatchers("/favicon.ico").permitAll()
                 
                 // Rotas que precisam de autenticação
                 .requestMatchers("/tasks/**").authenticated()
                 .requestMatchers("/users/**").authenticated()
                 
-                // Rotas administrativas (só ADMIN)
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                
-                // Qualquer outra rota precisa de autenticação
+                // Qualquer outra rota
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .headers(headers -> headers.frameOptions().disable()); // Para H2 console
-            
-        return http.build();
-    }
-    
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
-        configuration.setExposedHeaders(List.of("Authorization"));
-        configuration.setAllowCredentials(true);
+            // NECESSÁRIO para H2 Console funcionar
+            .headers(headers -> headers
+                .frameOptions(frame -> frame.sameOrigin()) // Permite iframes do mesmo origin
+                .contentTypeOptions(HeadersConfigurer.ContentTypeOptionsConfig::disable)
+            )
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+        return http.build();
     }
     
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-    
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
     }
 }

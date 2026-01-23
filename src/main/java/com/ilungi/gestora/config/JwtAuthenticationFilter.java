@@ -27,21 +27,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                   HttpServletResponse response, 
                                   FilterChain filterChain) throws ServletException, IOException {
         
-        String token = extractToken(request);
+        System.out.println("Filtro JWT executando para: " + request.getRequestURI());
         
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            String email = jwtTokenProvider.getEmailFromToken(token);
-            String role = jwtTokenProvider.getRoleFromToken(token);
+        String token = extractToken(request);
+        System.out.println("Token extraído: " + (token != null ? "SIM" : "NÃO"));
+        
+        if (token != null) {
+            System.out.println("Token válido? " + jwtTokenProvider.validateToken(token));
             
-            // Cria autenticação
-            UsernamePasswordAuthenticationToken authentication = 
-                new UsernamePasswordAuthenticationToken(
-                    email, 
-                    null, 
-                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
-                );
-            
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (jwtTokenProvider.validateToken(token)) {
+                String email = jwtTokenProvider.getEmailFromToken(token);
+                String role = jwtTokenProvider.getRoleFromToken(token);
+                
+                System.out.println("Email do token: " + email);
+                System.out.println("Role do token: " + role);
+                
+                // Cria autenticação
+                UsernamePasswordAuthenticationToken authentication = 
+                    new UsernamePasswordAuthenticationToken(
+                        email, 
+                        null, 
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
+                    );
+                
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                System.out.println("🔓 Autenticação configurada no SecurityContext");
+            }
         }
         
         filterChain.doFilter(request, response);
