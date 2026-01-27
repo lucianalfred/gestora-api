@@ -1,38 +1,38 @@
-# Estágio 1: Build
+# Dockerfile
+# Build stage
 FROM maven:3.9.9-eclipse-temurin-21 AS builder
 WORKDIR /app
 
-# Copiar apenas os arquivos necessários para build
+# Copiar pom.xml primeiro para cache
 COPY pom.xml .
-COPY src ./src
-
-# Baixar dependências (cache)
 RUN mvn dependency:go-offline -B
 
-# Build da aplicação
-RUN mvn clean package -DskipTests
+# Copiar código fonte
+COPY src ./src
 
-# Estágio 2: Runtime
+# Build
+RUN mvn clean package -DskipTests -Dfile.encoding=UTF-8
+
+# Runtime stage
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Criar usuário não-root
-RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
+# Configurações
+ENV LANG C.UTF-8
+ENV TZ=America/Sao_Paulo
 
-# Copiar o JAR do estágio de build
-COPY --from=builder --chown=spring:spring /app/target/*.jar app.jar
+# Copiar JAR
+COPY --from=builder /app/target/*.jar app.jar
 
-# Expor porta
+# Expor porta (Render usa a variável PORT)
 EXPOSE 8080
 
-# Configurações de memória e health check
-ENV JAVA_OPTS="-Xmx512m -Xms256m"
-ENV SPRING_PROFILES_ACTIVE="production"
+# Otimizações para Render
+ENV JAVA_OPTS="-Xmx512m -Xms256m -Dfile.encoding=UTF-8 -Dserver.port=${PORT:-8080}"
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT:-8080}/actuator/health || exit 1
 
-# Comando de execução
+# Comando
 ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar /app/app.jar"]
