@@ -96,7 +96,7 @@
 	 <resources>
         <resource>
             <directory>src/main/resources</directory>
-            <filtering>false</filtering> <!-- DESABILITA FILTERING -->
+            <filtering>false</filtering> 
         </resource>
     </resources>
 		<plugins>
