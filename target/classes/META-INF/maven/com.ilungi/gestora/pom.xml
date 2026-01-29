@@ -70,13 +70,7 @@
 			<scope>runtime</scope>
 		</dependency>
 		
-		<!-- Flyway (opcional, pode remover se não usar) -->
-		<!--
-		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
-		</dependency>
-		-->
+		
 		
 		<!-- Testes -->
 		<dependency>
